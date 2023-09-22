@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: fetch_latest
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
           "RELEASE_URL=$url" >> $GITHUB_ENV"
