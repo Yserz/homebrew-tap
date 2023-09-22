@@ -1,0 +1,23 @@
+name: flow-sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  format:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch_latest
+        run: |
+          url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
+          "RELEASE_URL=$url" >> $GITHUB_ENV"
+      - name: print_latest
+        run: |
+          echo "Release asset URL: $RELEASE_URL"
+      - name: brew_update
+        run: |
+          brew bump-formula-pr --write-only --url $RELEASE_URL myks
+          git diff
