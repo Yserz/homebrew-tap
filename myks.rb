@@ -1,8 +1,10 @@
 class Myks < Formula
   desc "Maintain configuration of many applications for multiple Kubernetes clusters"
   homepage "https://github.com/mykso/myks"
-  url "https://github.com/mykso/myks/releases/download/v2.0.1/myks_2.0.1_darwin_arm64.tar.gz"
-  sha256 "a8b3f16a57016b85bd80c2667c8f33d5f96587b36ac106bbbe04de036b6ff8ef"
+  url "https://github.com/mykso/myks/releases/download/v2.0.0/myks_2.0.0_darwin_arm64.tar.gz"
+  version "2.0.0"
+  version_scheme 1
+  sha256 "f612d1341f2c7bf89727fa9f5fcf21ada926063988261c90c38f86fb2ce37daf"
   license "MIT"
 
   def install
