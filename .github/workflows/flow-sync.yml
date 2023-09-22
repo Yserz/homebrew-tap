@@ -33,6 +33,6 @@ jobs:
 
           updated_formula_path=$(HOMEBREW_NO_INSTALL_FROM_API=1 brew edit myks --print-path)
           cat $updated_formula_path
-          mv updated_formula_path myks.rb
+          mv $updated_formula_path myks.rb
 
           git diff origin/main
