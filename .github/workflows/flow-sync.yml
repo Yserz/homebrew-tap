@@ -6,7 +6,7 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  format:
+  sync:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
