@@ -15,7 +15,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
-          version=$(gh release view --repo mykso/myks --json name,assets --jq '.name')
+          dirty_version=$(gh release view --repo mykso/myks --json name,assets --jq '.name')
+          version=${dirty_version/#v}
+
           echo "RELEASE_URL=$url" >> $GITHUB_ENV
           echo "RELEASE_VERSION=$version" >> $GITHUB_ENV
       - name: print_latest
