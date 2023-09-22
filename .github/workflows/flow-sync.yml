@@ -14,10 +14,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
-          url=$(gh release view --repo mykso/myks --json name,assets)
+          url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
           echo "$url"
-          "RELEASE_URL=$url" >> $GITHUB_ENV"
+          "RELEASE_URL=$url >> $GITHUB_ENV"
       - name: print_latest
         run: |
           echo "Release asset URL: $RELEASE_URL"
