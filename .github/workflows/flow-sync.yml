@@ -29,5 +29,5 @@ jobs:
         run: |
           brew tap yserz/tap
           brew install myks
-          brew bump-formula-pr --version $RELEASE_VERSION --write-only --url $RELEASE_URL myks
+          brew bump-formula-pr --version $RELEASE_VERSION --url $RELEASE_URL myks
           git diff
