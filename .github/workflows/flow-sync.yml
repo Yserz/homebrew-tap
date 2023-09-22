@@ -15,13 +15,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
+          version=$(gh release view --repo mykso/myks --json name,assets --jq '.name')
           echo "RELEASE_URL=$url" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$version" >> $GITHUB_ENV
       - name: print_latest
         run: |
-          echo "Release asset URL: $RELEASE_URL"
+          echo "Release ($RELEASE_VERSION) asset URL: $RELEASE_URL"
       - name: brew_update
         run: |
           brew tap yserz/tap
           brew install myks
-          brew bump-formula-pr --write-only --url $RELEASE_URL myks
+          brew bump-formula-pr --version $RELEASE_VERSION --write-only --url $RELEASE_URL myks
           git diff
