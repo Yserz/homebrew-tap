@@ -28,8 +28,8 @@ class Myks < Formula
   depends_on "go" => :build
   depends_on "git"
   depends_on "helm"
-  depends_on "carvel-dev/carvel/ytt"
-  depends_on "carvel-dev/carvel/vendir"
+  depends_on "ytt"
+  depends_on "vendir"
 
 
   def install
