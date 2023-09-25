@@ -33,13 +33,9 @@ class Myks < Formula
 
   def install
     ENV["GOPATH"] = buildpath
-    bin_path = buildpath/"myks"
-    bin_path.install Dir["*"]
     # -X main.commit=#{version} -X main.date=#{version}
-    cd bin_path do
-      system "go", "build", "-o", bin/"myks", "-ldflags=\"-X 'main.version=#{version}'\""
-    end
-    # bin.install "myks"
+    system "go", "build", "-o", "myks", "-ldflags=\"-X 'main.version=#{version}'\""
+    bin.install "myks"
   end
 
   test do
