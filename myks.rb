@@ -26,12 +26,16 @@ class Myks < Formula
   # end
 
   depends_on "go" => :build
-  depends_on "helm"
-  depends_on "ytt"
-  depends_on "vendir"
+  depends_on "git" => :run
+  depends_on "helm" => :run
+  depends_on "ytt" => :run
+  depends_on "vendir" => :run
 
 
   def install
+    ENV["GOPATH"] = buildpath
+    # -X main.commit=#{version} -X main.date=#{version}
+    system "go", "build", "-o", "myks", "-ldflags", "-X main.version=#{version}"
     bin.install "myks"
   end
 
