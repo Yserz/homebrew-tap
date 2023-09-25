@@ -33,7 +33,7 @@ jobs:
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
-          brew tap carvel-dev/carvel
+          # brew tap carvel-dev/carvel
           brew tap yserz/tap
           brew install myks
 
