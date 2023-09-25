@@ -53,3 +53,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add .
           git diff-index --quiet HEAD || (git commit -m "chore: update myks to $RELEASE_VERSION" && git push)
+      - name: print_error
+        if: failure()
+        run: |
+          cat /Users/runner/Library/Logs/Homebrew/myks/01.go
