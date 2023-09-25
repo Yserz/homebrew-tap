@@ -3,6 +3,7 @@ class Myks < Formula
   homepage "https://github.com/mykso/myks"
   url "https://github.com/mykso/myks.git",
       tag:      "v2.0.0"
+      revision: "b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b"
   version "2.0.0"
   license "MIT"
   version_scheme 1
