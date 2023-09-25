@@ -37,7 +37,7 @@ class Myks < Formula
     bin_path.install Dir["*"]
     # -X main.commit=#{version} -X main.date=#{version}
     cd bin_path do
-      system "go", "build", "-o", bin/"myks", "-ldflags", "-X main.version=#{version}"
+      system "go", "build", "-o", bin/"myks", "-ldflags=\"-X 'main.version=#{version}'\""
     end
     # bin.install "myks"
   end
