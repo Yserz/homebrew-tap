@@ -44,10 +44,8 @@ jobs:
 
           cat $updated_formula_path
           mv $updated_formula_path myks.rb
-
-          git diff origin/main
       - name: commit_changes
-        if: false
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
