@@ -25,7 +25,7 @@ class Myks < Formula
   #   end
   # end
 
-  depends_on "go" => :build
+  depends_on "go" => :optional
   depends_on "git"
   depends_on "helm"
   depends_on "vendir"
