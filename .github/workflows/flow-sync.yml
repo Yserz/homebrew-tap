@@ -35,7 +35,7 @@ jobs:
         run: |
           brew tap yserz/tap
           brew install myks
-          brew bump-formula-pr --write-only --version $RELEASE_VERSION --tag v$RELEASE_VERSION myks
+          brew bump-formula-pr --write-only --force --version $RELEASE_VERSION --tag v$RELEASE_VERSION myks
 
           updated_formula_path=$(HOMEBREW_NO_INSTALL_FROM_API=1 brew edit myks --print-path)
           cat $updated_formula_path
