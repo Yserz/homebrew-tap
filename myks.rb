@@ -32,10 +32,7 @@ class Myks < Formula
   depends_on "ytt"
 
   def install
-    ENV["GOPATH"] = buildpath
-    # -X main.commit=#{version} -X main.date=#{version}
-    system "go", "build", "-o", "myks", "-v"
-    #, "-ldflags=\"-X 'main.version=#{version}'\""
+    system "go", "build", "-o", "myks", "-ldflags=-X 'main.version=#{version}'"
     bin.install "myks"
   end
 
