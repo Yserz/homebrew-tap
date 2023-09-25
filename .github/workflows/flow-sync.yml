@@ -35,7 +35,7 @@ jobs:
         run: |
           brew tap carvel-dev/carvel
           brew tap yserz/tap
-          brew install myks
+          brew install myks --verbose
 
           updated_formula_path=$(HOMEBREW_NO_INSTALL_FROM_API=1 brew edit myks --print-path)
           mv myks.rb $updated_formula_path
