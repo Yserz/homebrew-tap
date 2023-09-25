@@ -28,9 +28,8 @@ class Myks < Formula
   depends_on "go" => :build
   depends_on "git"
   depends_on "helm"
-  depends_on "ytt"
   depends_on "vendir"
-
+  depends_on "ytt"
 
   def install
     ENV["GOPATH"] = buildpath
