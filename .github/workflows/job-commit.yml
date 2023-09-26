@@ -25,10 +25,11 @@ jobs:
         with:
           name: ${{ inputs.ARTIFACT_ID }}
           path: ./
-      - name: status
+      - name: Diff
         run: |
-          git status
+          git diff origin/main -- ./myks.rb
       - name: commit_changes
+        if: inputs.DRYRUN == 'false'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
