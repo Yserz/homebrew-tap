@@ -8,26 +8,23 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-env:
-  FORMULA_NAME: myks
-
 jobs:
   latest-release-version:
     uses: ./.github/workflows/job-latest-release-version.yml
     with:
       REPO_OWNER: mykso
-      REPO_NAME: ${{ env.FORMULA_NAME }}
+      REPO_NAME: myks
   update-formula:
     uses: ./.github/workflows/job-update-formula.yml
     needs: [latest-release-version]
     with:
-      FORMULA_NAME: ${{ env.FORMULA_NAME }}
+      FORMULA_NAME: myks
       RELEASE_VERSION: ${{ needs.latest-release-version.outputs.RELEASE_VERSION }}
       ARTIFACT_ID: updated-formula
   commit:
     uses: ./.github/workflows/job-commit.yml
     needs: [latest-release-version, update-formula]
     with:
-      COMMIT_MESSAGE: "chore: update ${{ env.FORMULA_NAME }} to ${{ needs.latest-release-version.outputs.RELEASE_VERSION }}"
+      COMMIT_MESSAGE: "chore: update myks to ${{ needs.latest-release-version.outputs.RELEASE_VERSION }}"
       ARTIFACT_ID: updated-formula
       DRYRUN: ${{ github.event_name == 'pull_request' }}
