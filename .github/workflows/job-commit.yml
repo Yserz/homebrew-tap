@@ -20,16 +20,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.ARTIFACT_ID }}
           path: ./
-      - name: Diff
+      - name: status
         run: |
-          git diff origin/main -- ./myks.rb
+          git status
       - name: commit_changes
         env:
           GH_TOKEN: ${{ github.token }}
