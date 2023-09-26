@@ -29,6 +29,7 @@ jobs:
         env:
           HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
         run: |
+          set +e # ignore errors
           brew bump-formula-pr --write-only --force --no-audit --tag v${{ inputs.RELEASE_VERSION }} ${{ inputs.FORMULA_NAME }}
           cat $updated_formula_path
       - uses: actions/upload-artifact@v3
