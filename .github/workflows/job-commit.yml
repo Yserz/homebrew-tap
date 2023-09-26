@@ -1,0 +1,38 @@
+on:
+  workflow_call:
+    inputs:
+      COMMIT_MESSAGE:
+        required: true
+        type: string
+      ARTIFACT_ID:
+        required: true
+        type: string
+      DRYRUN:
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.ARTIFACT_ID }}
+          path: ./
+      - name: Diff
+        run: |
+          git diff origin/main
+      - name: commit_changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git diff-index --quiet HEAD || (git commit -m "${{ inputs.COMMIT_MESSAGE }}" && git push)

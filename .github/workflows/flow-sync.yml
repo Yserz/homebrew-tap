@@ -8,53 +8,26 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-permissions:
-  contents: write
+env:
+  FORMULA_NAME: myks
 
 jobs:
-  sync:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: fetch_latest
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          url=$(gh release view --repo mykso/myks --json name,assets --jq '.assets[] | select(.url | contains("darwin_amd64")) | .url')
-          dirty_version=$(gh release view --repo mykso/myks --json name,assets --jq '.name')
-          version=${dirty_version/#v}
-
-          echo "RELEASE_URL=$url" >> $GITHUB_ENV
-          echo "RELEASE_VERSION=$version" >> $GITHUB_ENV
-      - name: print_latest
-        run: |
-          echo "Release ($RELEASE_VERSION) asset URL: $RELEASE_URL"
-      - name: brew_update
-        env:
-          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
-        run: |
-          brew uninstall go@1.20
-          brew tap carvel-dev/carvel
-          brew tap yserz/tap
-          brew install myks --verbose
-
-          updated_formula_path=$(HOMEBREW_NO_INSTALL_FROM_API=1 brew edit myks --print-path)
-          mv myks.rb $updated_formula_path
-
-          brew bump-formula-pr --write-only --force --tag v$RELEASE_VERSION myks
-
-          cat $updated_formula_path
-          mv $updated_formula_path myks.rb
-      - name: commit_changes
-        if: github.event_name != 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add .
-          git diff-index --quiet HEAD || (git commit -m "chore: update myks to $RELEASE_VERSION" && git push)
-      - name: print_error
-        if: failure()
-        run: |
-          cat /Users/runner/Library/Logs/Homebrew/myks/01.go
+  latest-release-version:
+    uses: ./.github/workflows/job-latest-release-version.yml
+    with:
+      REPO_OWNER: mykso
+      REPO_NAME: ${{ env.FORMULA_NAME }}
+  update-formula:
+    uses: ./.github/workflows/job-update-formula.yml
+    needs: [latest-release-version]
+    with:
+      FORMULA_NAME: ${{ env.FORMULA_NAME }}
+      RELEASE_VERSION: ${{ needs.latest-release-version.outputs.RELEASE_VERSION }}
+      ARTIFACT_ID: updated-formula
+  commit:
+    uses: ./.github/workflows/job-commit.yml
+    needs: [latest-release-version, update-formula]
+    with:
+      COMMIT_MESSAGE: "chore: update ${{ env.FORMULA_NAME }} to ${{ needs.latest-release-version.outputs.RELEASE_VERSION }}"
+      ARTIFACT_ID: updated-formula
+      DRYRUN: ${{ github.event_name == 'pull_request' }}
