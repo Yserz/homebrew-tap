@@ -1,0 +1,28 @@
+on:
+  workflow_call:
+    inputs:
+      REPO_OWNER:
+        required: true
+        type: string
+      REPO_NAME:
+        required: true
+        type: string
+    outputs:
+      RELEASE_VERSION:
+        description: "Latest release version"
+        value: ${{ jobs.latest-release-version.outputs.RELEASE_VERSION }}
+
+jobs:
+  latest-release-version:
+    outputs:
+      RELEASE_VERSION: ${{ steps.get_latest_release.outputs.RELEASE_VERSION }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: get_latest_release
+        id: get_latest_release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          dirty_version=$(gh release view --repo ${{ inputs.REPO_OWNER }}/${{ inputs.REPO_NAME }} --json name --jq '.name')
+          version=${dirty_version/#v}
+          echo "RELEASE_VERSION=$version" >> $GITHUB_OUTPUT

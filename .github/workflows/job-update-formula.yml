@@ -1,0 +1,39 @@
+on:
+  workflow_call:
+    inputs:
+      FORMULA_NAME:
+        required: true
+        type: string
+      RELEASE_VERSION:
+        required: true
+        type: string
+      ARTIFACT_ID:
+        description: "Artifact ID of the updated formula"
+        type: string
+
+jobs:
+  update-formula:
+    runs-on: macos-latest
+    steps:
+      - name: prepare-formula
+        id: prepare-formula
+        run: |
+          brew uninstall go@1.20
+          brew tap carvel-dev/carvel
+          brew tap yserz/tap
+          brew install ${{ inputs.FORMULA_NAME }} --verbose
+
+          formula_path=$(HOMEBREW_NO_INSTALL_FROM_API=1 brew edit ${{ inputs.FORMULA_NAME }} --print-path)
+          echo "FORMULA_PATH=$formula_path" >> $GITHUB_OUTPUT
+      - name: update-formula
+        env:
+          HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
+        run: |
+          set +e # ignore errors
+          brew bump-formula-pr --write-only --force --tag v${{ inputs.RELEASE_VERSION }} ${{ inputs.FORMULA_NAME }}
+          cat $updated_formula_path
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.ARTIFACT_ID }}
+          path: |
+            ${{ steps.prepare-formula.outputs.FORMULA_PATH }}
