@@ -31,7 +31,7 @@ jobs:
         run: |
           git diff origin/main -- ./myks.rb
       - name: commit_changes
-        if: inputs.DRYRUN == 'false'
+        if: ${{ !inputs.DRYRUN }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
