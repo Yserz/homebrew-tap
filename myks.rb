@@ -2,8 +2,8 @@ class Myks < Formula
   desc "Maintain configuration of many applications for multiple Kubernetes clusters"
   homepage "https://github.com/mykso/myks"
   url "https://github.com/mykso/myks.git",
-      tag:      "v4.11.2",
-      revision: "671c09282db02e0bc151c868ed803583006aecc2"
+      tag:      "v4.11.3",
+      revision: "752b75f876bd4582c98d86c9e0588d7772c913c1"
   license "MIT"
   version_scheme 1
 
